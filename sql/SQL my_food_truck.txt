@@ -1,0 +1,172 @@
+CREATE TABLE family(
+id INT GENERATED ALWAYS AS IDENTITY,
+name VARCHAR(255) NOT NULL,
+PRIMARY KEY(id)
+);
+
+CREATE TABLE category(
+id INT GENERATED ALWAYS AS IDENTITY,			
+name VARCHAR(255) NOT NULL,
+family_id INT NOT NULL,			|
+PRIMARY KEY(id),			|    ONE TO MANY
+  CONSTRAINT fk_family			|	pas de table intermédiaire nécessaire
+  FOREIGN KEY(family_id)		|
+  REFERENCES family(id)			|
+);
+
+CREATE TABLE product(
+id INT GENERATED ALWAYS AS IDENTITY,
+name VARCHAR(255) NOT NULL,
+PRIMARY KEY(id)
+);
+
+
+CREATE TABLE size(
+id INT GENERATED ALWAYS AS IDENTITY,
+name VARCHAR(255) NOT NULL,
+PRIMARY KEY(id)
+);
+
+============= tables intermediaires pour les MANY TO MANY=============
+
+CREATE TABLE category_product(
+category_id INT NOT NULL,
+product_id INT NOT NULL,
+CONSTRAINT fk_category
+   FOREIGN KEY(category_id)
+   REFERENCES category(id),
+CONSTRAINT fk_product
+   FOREIGN KEY(product_id)
+   REFERENCES product(id)
+);
+
+CREATE TABLE product_size(
+product_id INT NOT NULL,
+size_id INT NOT NULL,
+CONSTRAINT fk_product
+   FOREIGN KEY(product_id)
+   REFERENCES product(id),
+CONSTRAINT fk_size
+   FOREIGN KEY(size_id)
+   REFERENCES size(id)
+);
+
+
+CREATE TABLE family_product(
+family_id INT NOT NULL,
+product_id INT NOT NULL,
+CONSTRAINT fk_family
+   FOREIGN KEY(family_id)
+   REFERENCES family(id),
+CONSTRAINT fk_product
+   FOREIGN KEY(product_id)
+   REFERENCES product(id)
+);
+
+
+INSERT INTO category (name, family_id) VALUES ('Menu Maxi Best Of', 1), ('Menu Mc First', 1), ('Happy Meal', 1), ('Nos boissons froides', 2), ('Nos boissons chaudes', 2), ('Nos Burgers', NULL);
+
+========= Créer un VIEW ===========
+
+CREATE VIEW add_all_products AS
+SELECT f.id, f.nom AS familly, c.nom AS category, p.nom AS product, s.nom AS size
+FROM familly f
+RIGHT JOIN category c
+ON f.id = c.familly_id
+INNER JOIN category_product cp
+ON cp.category_id = c.id
+INNER JOIN product p
+ON p.id = cp.product_id
+LEFT JOIN product_size ps
+ON ps.product_id = p.id
+LEFT JOIN size s
+ON s.id = ps.size_id;
+
+======== afficher VIEW =========
+ SELECT * FROM add_all_products;
+
+== relier les size du Coca (table : size) , au Coca (table : product) =========
+
+my_food_truck=# SELECT * FROM product;
+ id |   name
+----+-----------
+  1 | Big Mac
+  2 | Mc First
+  3 | Hamburger
+  4 | Cheese
+  5 | Coca	<=============
+  6 | Café
+(6 lignes)
+
+
+my_food_truck=# SELECT * FROM size;
+ id | name
+----+------
+  1 | 25cL	| <===========
+  2 | 40cL	|
+  3 | 50cL	|
+(3 lignes)
+
+INSERT INTO product_size (product_id, size_id) VALUES
+(5, 1),
+(5, 2),
+(5, 3);
+
+INSERT 0 3
+
+
+=== mettre à jour un élément, ici renommer: Café en Café allongé =========
+
+UPDATE product
+SET name = 'Café allongé'
+WHERE id = 6;
+
+UPDATE 1
+
+my_food_truck=# SELECT * FROM product;
+
+ id |     name
+----+--------------
+  1 | Big Mac
+  2 | Mc First
+  3 | Hamburger
+  4 | Cheese
+  5 | Coca
+  6 | Café allongé
+(6 lignes)
+
+-- Mettre à jour plusieurs valeurs d'une même colonne dans une table ---
+
+UPDATE nom_table
+SET nom_colonne =
+CASE 
+    WHEN condition1 THEN  nouvelle_valeur1
+    WHEN condition2 THEN  nouvelle_valeur2
+    -- (ELSE si nécessaire) --
+END
+WHERE (condition pour cloturer le UPDATE, ex: 1 + 1 = 2 <-- ici condition toujours vraie)
+
+INSER INTO product (name, category_id) VALUES ('cocalight',6);
+
+SELECT p.*, c.name FROM product p
+INNER JOIN category_product cp
+ON p.id = cp.product_id
+INNER JOIN category c
+ON c.id = cp.category_id
+WHERE c.id=6;
+
+
+WITH
+    inserted_product AS (
+        INSERT INTO
+            product (nom)
+        VALUES
+            ('coca light') RETURNING id
+    )
+INSERT INTO
+    category_product (product_id, category_id)
+SELECT
+    id,
+    10
+FROM
+    inserted_product;

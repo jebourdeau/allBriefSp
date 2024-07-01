@@ -1,0 +1,20 @@
+{
+  "name": "simplon-2024-brief-05",
+  "version": "1.0.0",
+  "description": "Le middleware agit comme un pont entre les requêtes client entrantes et les réponses sortantes du serveur. C'est comme un intermédiaire utile qui intervient pour traiter, modifier ou augmenter les requêtes au fur et à mesure qu'elles arrivent dans votre application.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/main.js",
+    "dev": "nodemon src/main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}

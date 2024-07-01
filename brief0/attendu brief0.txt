@@ -1,0 +1,1 @@
+Une premiere partie assez compliqué, sans information pour le Numéro1, j'ai trouvé la solution dans la console.log de rajouté Number, qui permet de lancer un calcul entre les caractères et qui cassera la chaine.

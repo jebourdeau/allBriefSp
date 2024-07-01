@@ -1,0 +1,35 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    min-height: 100vh;
+
+}
+h1{
+    text-align: center ;
+    color: red;
+    display: flex;
+}
+
+.box{
+    color: rgb(241, 83, 83);
+    text-align: center;
+   justify-content: space-around;
+    height: 80px;
+    width: 80px;
+    background: yellow;
+}
+.box.active{
+    color: antiquewhite;
+    background: darkblue;
+
+}
+footer{
+    justify-content: space-around;
+}

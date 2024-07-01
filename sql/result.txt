@@ -1,0 +1,8 @@
+ id |  familly  |      category      | product | size 
+----+-----------+--------------------+---------+------
+    |           | entr‚es            | Big Mac | 
+  4 | Nos Menus | Menus Best Of      | Big Mac | 
+  4 | Nos Menus | Menus Maxi Best Of | Big Mac | 
+    |           | Nos Burgers        | Big Mac | 
+(4 lignes)
+
